@@ -9,6 +9,7 @@ export interface SiteSettings {
   hero_texte: string;
   hero_couleur: string;
   logo_url: string | null;
+  logo_blanc_url: string | null;
   email_contact: string;
   facebook_url: string | null;
   adresse: string;

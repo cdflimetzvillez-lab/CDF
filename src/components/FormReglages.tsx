@@ -1,6 +1,7 @@
 'use client';
 import { useActionState, useState } from 'react';
 import { majReglages, type ActionState } from '@/app/actions';
+import ChampImage from '@/components/ChampImage';
 import type { SiteSettings } from '@/lib/types';
 
 export default function FormReglages({ settings }: { settings: SiteSettings }) {
@@ -43,11 +44,20 @@ export default function FormReglages({ settings }: { settings: SiteSettings }) {
             <input id="hero_couleur" name="hero_couleur" type="color" value={couleur}
               onChange={(e) => setCouleur(e.target.value)} style={{ height: 46, padding: 4 }} />
           </div>
-          <div className="field">
-            <label htmlFor="logo_url">URL du logo (PNG transparent)</label>
-            <input id="logo_url" name="logo_url" defaultValue={s.logo_url ?? ''}
-              placeholder="https://xxx.supabase.co/storage/v1/object/public/medias/logo.png" />
-          </div>
+          <ChampImage
+            name="logo_url"
+            label="Logo couleur (fonds clairs)"
+            valeurInitiale={s.logo_url}
+            dossier="logo"
+            aide="Utilisé dans le bandeau d'accueil. PNG transparent."
+          />
+          <ChampImage
+            name="logo_blanc_url"
+            label="Logo blanc (fonds sombres)"
+            valeurInitiale={s.logo_blanc_url}
+            dossier="logo"
+            aide="Utilisé dans le pied de page. PNG transparent."
+          />
         </div>
         {s.logo_url && (
           <div style={{ background: couleur, padding: '1.5rem', border: '2px solid var(--noir)',

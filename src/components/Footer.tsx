@@ -8,7 +8,7 @@ export default function Footer({
     <footer>
       {true ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img className="foot-logo" src={settings.logo_url || '/logo-cdf.png'} alt="Comité des Fêtes de Limetz-Villez" />
+        <img className="foot-logo" src={settings.logo_blanc_url || settings.logo_url || '/logo-cdf.png'} alt="Comité des Fêtes de Limetz-Villez" />
       ) : (
         <div className="anton" style={{ color: 'var(--creme)', fontSize: '1.3rem', lineHeight: 1.1 }}>
           Comité des Fêtes<br />de Limetz-Villez

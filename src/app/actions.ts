@@ -52,7 +52,7 @@ export async function majReglages(_prev: ActionState, fd: FormData): Promise<Act
   if (!isAdmin) return { error: 'Accès refusé.' };
 
   const champs = ['hero_kicker','hero_titre_1','hero_titre_accent','hero_titre_2','hero_texte',
-    'hero_couleur','logo_url','email_contact','facebook_url','adresse',
+    'hero_couleur','logo_url','logo_blanc_url','email_contact','facebook_url','adresse',
     'asso_titre','asso_texte','benevoles_titre','benevoles_texte'] as const;
 
   const payload: Record<string, string | null> = {};

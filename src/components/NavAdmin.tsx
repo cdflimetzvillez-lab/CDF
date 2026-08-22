@@ -9,6 +9,7 @@ const LIENS = [
   { href: '/admin/demandes', label: 'Demandes reçues' },
   { href: '/admin/association', label: 'Association' },
   { href: '/admin/parametres', label: 'Réglages du site' },
+  { href: '/admin/maintenance', label: 'Maintenance' },
 ];
 
 export default function NavAdmin() {
