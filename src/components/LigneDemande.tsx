@@ -1,5 +1,6 @@
 'use client';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
+import Confirmation from '@/components/Confirmation';
 import { changerStatutDemande, supprimerDemande } from '@/app/actions';
 import type { Demande } from '@/lib/types';
 
@@ -9,6 +10,7 @@ const LIBELLES: Record<string, string> = {
 
 export default function LigneDemande({ demande }: { demande: Demande }) {
   const [pending, start] = useTransition();
+  const [confirme, setConfirme] = useState(false);
   const d = demande;
 
   return (
@@ -35,13 +37,19 @@ export default function LigneDemande({ demande }: { demande: Demande }) {
         </select>
       </td>
       <td style={{ textAlign: 'right' }}>
-        <button className="btn btn-w btn-sm"
-          onClick={() => {
-            if (confirm(`Supprimer la demande de ${d.nom} ?`))
-              start(() => { supprimerDemande(d.id); });
-          }}>
+        <button className="btn btn-w btn-sm" onClick={() => setConfirme(true)}>
           Suppr.
         </button>
+        <Confirmation
+          ouvert={confirme}
+          danger
+          titre="Supprimer cette demande ?"
+          message={`Le message de ${d.nom} sera définitivement effacé.`}
+          detail="Pensez à noter ses coordonnées ailleurs si vous comptez le recontacter."
+          libelleConfirmer="Supprimer"
+          onAnnuler={() => setConfirme(false)}
+          onConfirmer={() => { setConfirme(false); start(() => { supprimerDemande(d.id); }); }}
+        />
       </td>
     </tr>
   );

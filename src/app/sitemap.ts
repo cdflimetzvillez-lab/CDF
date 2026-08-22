@@ -1,10 +1,13 @@
 import type { MetadataRoute } from 'next';
-import { createClient } from '@/lib/supabase/server';
+import { createStaticClient } from '@/lib/supabase/static';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://comitedesfetes-limetzvillez.fr';
-  const supabase = await createClient();
-  const { data } = await supabase.from('evenements').select('slug, updated_at').eq('publie', true);
+  const supabase = createStaticClient();
+  const { data } = await supabase
+    .from('evenements')
+    .select('slug, updated_at')
+    .eq('publie', true);
 
   return [
     { url: base, lastModified: new Date(), priority: 1 },

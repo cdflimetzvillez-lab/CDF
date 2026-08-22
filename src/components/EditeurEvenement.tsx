@@ -93,6 +93,23 @@ export default function EditeurEvenement({ evenement, creneaux, infos, faq }: Pr
             <input id="tarif" name="tarif" defaultValue={e.tarif ?? 'Entrée libre'} />
           </div>
         </div>
+
+        <div className="row2">
+          <div className="field">
+            <label htmlFor="lien_reservation">
+              Lien de réservation (laisser vide = pas de bouton)
+            </label>
+            <input id="lien_reservation" name="lien_reservation"
+              defaultValue={e.lien_reservation ?? ''}
+              placeholder="https://helloasso.com/... ou mailto:..." />
+          </div>
+          <div className="field">
+            <label htmlFor="libelle_reservation">Texte du bouton</label>
+            <input id="libelle_reservation" name="libelle_reservation"
+              defaultValue={e.libelle_reservation ?? 'Réserver'}
+              placeholder="Réserver" />
+          </div>
+        </div>
       </div>
 
       {/* ---------- Apparence ---------- */}

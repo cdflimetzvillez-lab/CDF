@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import MenuButton from '@/components/MenuButton';
+import RetourHaut from '@/components/RetourHaut';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import { dateCourte, dateLongue, horaires, texteSur } from '@/lib/format';
@@ -23,16 +24,19 @@ export default async function Home() {
   return (
     <>
       <MenuButton />
+      <RetourHaut />
 
       <header className="hero" style={{ ['--evt' as string]: s.hero_couleur }}>
         <div className="hero-inner">
-          {s.logo_url && (
-            <div className="logo-badge">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="hero-logo" src={s.logo_url} alt="Comité des Fêtes de Limetz-Villez" />
-            </div>
-          )}
-          <div style={{ marginBottom: '1.2rem' }}>
+          <div className="logo-badge">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="hero-logo"
+              src={s.logo_url || '/logo-cdf.png'}
+              alt="Comité des Fêtes de Limetz-Villez"
+            />
+          </div>
+          <div style={{ marginBottom: '2.4rem' }}>
             <span className="kicker mono">{s.hero_kicker}</span>
           </div>
           <h1>
@@ -46,6 +50,14 @@ export default async function Home() {
             <a className="btn btn-w" href="#benevoles">Devenir bénévole</a>
           </div>
         </div>
+
+        <a className="scroll-hint" href="#evenements">
+          <span>Faire défiler</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"
+               strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </a>
       </header>
 
       <Marquee items={evts.map((e) => `${dateCourte(e.date_debut)} · ${e.titre}`)} />

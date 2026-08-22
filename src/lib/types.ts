@@ -35,6 +35,8 @@ export interface Evenement {
   lieu: string | null;
   adresse: string | null;
   tarif: string;
+  lien_reservation: string | null;
+  libelle_reservation: string;
   saison: Saison;
   image_url: string | null;
   publie: boolean;

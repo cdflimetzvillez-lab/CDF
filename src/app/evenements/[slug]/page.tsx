@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
+import { createStaticClient } from '@/lib/supabase/static';
 import MenuButton from '@/components/MenuButton';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -12,7 +13,7 @@ import type { Evenement, Creneau, InfoBloc, FaqItem, SiteSettings } from '@/lib/
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase.from('evenements').select('slug').eq('publie', true);
   return (data ?? []).map((e) => ({ slug: e.slug }));
 }
@@ -88,7 +89,7 @@ export default async function PageEvenement(
 
           <div className="ehero-cta">
             {cr.length > 0 && <a className="btn btn-y" href="#programme">Voir le programme</a>}
-            <a className="btn btn-w" href="#participer">En être</a>
+            <a className="btn btn-w" href="#participer">Participer</a>
             {infos && infos.length > 0 && <a className="btn btn-k" href="#infos">Y aller</a>}
           </div>
         </div>
