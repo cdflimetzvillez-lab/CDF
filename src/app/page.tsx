@@ -66,7 +66,7 @@ export default async function Home() {
         <div className="wrap">
           <div className="head">
             <h2>Le programme</h2>
-            <p>Quatre affiches, quatre saisons. Cliquez pour les horaires, le lieu et les inscriptions.</p>
+            <p>Nos rendez-vous de l&apos;année. Cliquez pour les horaires, le lieu et les inscriptions.</p>
           </div>
           <div className="grid">
             {evts.map((e, i) => {
