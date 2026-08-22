@@ -4,7 +4,7 @@ import MenuButton from '@/components/MenuButton';
 import RetourHaut from '@/components/RetourHaut';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
-import { dateCourte, dateLongue, horaires, texteSur } from '@/lib/format';
+import { dateCourte, dateLongue, horaires, periode, texteSur } from '@/lib/format';
 import type { SiteSettings, Stat, Evenement } from '@/lib/types';
 
 export const revalidate = 60;
@@ -81,7 +81,7 @@ export default async function Home() {
                   <span className="num">{String(i + 1).padStart(2, '0')}</span>
                   <div>
                     <div className="when">
-                      {dateLongue(e.date_debut)} · {horaires(e.heure_debut, e.heure_fin)}
+                      {periode(e.date_debut, e.date_fin)}{horaires(e.heure_debut, e.heure_fin) && ` · ${horaires(e.heure_debut, e.heure_fin)}`}
                     </div>
                     <h3>{e.titre}</h3>
                     <p>{e.chapo}</p>

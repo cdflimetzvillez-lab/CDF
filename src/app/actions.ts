@@ -110,6 +110,7 @@ export async function enregistrerEvenement(_prev: ActionState, fd: FormData): Pr
     couleur: String(fd.get('couleur') ?? '#FF3D7F'),
     couleur_sombre: String(fd.get('couleur_sombre') ?? '#C42A5F'),
     date_debut: String(fd.get('date_debut') ?? ''),
+    date_fin: String(fd.get('date_fin') ?? '') || null,
     heure_debut: String(fd.get('heure_debut') ?? '').trim() || null,
     heure_fin: String(fd.get('heure_fin') ?? '').trim() || null,
     lieu: String(fd.get('lieu') ?? '').trim() || null,

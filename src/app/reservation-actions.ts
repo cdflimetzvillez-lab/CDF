@@ -5,8 +5,13 @@ import { revalidatePath } from 'next/cache';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { requireAdmin } from '@/lib/supabase/server';
 import { creerCheckout, lireCheckout, genererReference } from '@/lib/sumup';
+import { billetHtml, billetTexte, alerteReservationHtml } from '@/lib/emails';
 
 export type EtatResa = { erreur?: string } | null;
+
+/** Champs de l'événement rapatriés avec la réservation, pour l'email. */
+const CHAMPS_EVT =
+  '*, evenements(titre, slug, date_debut, date_fin, lieu, adresse, heure_debut, heure_fin, couleur)';
 
 /* =========================================================
    PUBLIC — créer une réservation et partir en paiement
@@ -115,7 +120,7 @@ export async function verifierPaiement(reference: string) {
 
   const { data: resa } = await db
     .from('reservations')
-    .select('*, evenements(titre, slug, date_debut, lieu, heure_debut)')
+    .select(CHAMPS_EVT)
     .eq('reference', reference)
     .maybeSingle();
 
@@ -141,7 +146,7 @@ export async function verifierPaiement(reference: string) {
           paye_le: nouveau === 'payee' ? new Date().toISOString() : null,
         })
         .eq('id', resa.id)
-        .select('*, evenements(titre, slug, date_debut, lieu, heure_debut)')
+        .select(CHAMPS_EVT)
         .single();
 
       if (nouveau === 'payee') await envoyerBillet(maj);
@@ -155,47 +160,77 @@ export async function verifierPaiement(reference: string) {
 }
 
 /* =========================================================
-   Email de confirmation (optionnel — nécessite RESEND_API_KEY)
+   Emails — billet au client et alerte au comité.
+   Silencieux si RESEND_API_KEY n'est pas configurée :
+   la réservation reste valide, seul l'envoi est désactivé.
    ========================================================= */
 export async function envoyerBillet(resa: any) {
   if (!process.env.RESEND_API_KEY || !resa) return;
 
-  const evt = resa.evenements;
+  const evt = resa.evenements ?? {};
   const from = process.env.RESEND_FROM_EMAIL
-    ?? 'Comité des Fêtes <noreply@comitedesfetes-limetzvillez.fr>';
+    ?? 'Comité des Fêtes de Limetz-Villez <billetterie@cdf-limetzvillez.fr>';
+  const urlSite = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://cdf-limetzvillez.fr';
 
-  try {
-    await fetch('https://api.resend.com/emails', {
+  const donnees = {
+    nom: resa.nom,
+    places: resa.places,
+    montant_centimes: resa.montant_centimes,
+    code_billet: resa.code_billet,
+    reference: resa.reference,
+    commentaire: resa.commentaire,
+    evenement: {
+      titre: evt.titre ?? 'Comité des Fêtes',
+      date_debut: evt.date_debut,
+      date_fin: evt.date_fin,
+      heure_debut: evt.heure_debut,
+      heure_fin: evt.heure_fin,
+      lieu: evt.lieu,
+      adresse: evt.adresse,
+      couleur: evt.couleur,
+      slug: evt.slug,
+    },
+  };
+
+  const envoyer = (corps: Record<string, unknown>) =>
+    fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        from,
-        to: [resa.email],
-        bcc: process.env.CONTACT_EMAIL ? [process.env.CONTACT_EMAIL] : undefined,
-        subject: `Votre réservation — ${evt?.titre ?? 'Comité des Fêtes'}`,
-        text:
-`Bonjour ${resa.nom},
-
-Votre réservation est confirmée.
-
-  Événement : ${evt?.titre}
-  Places    : ${resa.places}
-  Montant   : ${(resa.montant_centimes / 100).toFixed(2)} €
-  Code billet : ${resa.code_billet}
-
-Présentez ce code à l'entrée.
-
-Référence de paiement : ${resa.reference}
-
-À bientôt,
-Le Comité des Fêtes de Limetz-Villez`,
-      }),
+      body: JSON.stringify(corps),
     });
+
+  // --- billet au client ---
+  try {
+    const r = await envoyer({
+      from,
+      to: [resa.email],
+      reply_to: process.env.CONTACT_EMAIL,
+      subject: `Votre billet — ${donnees.evenement.titre}`,
+      html: billetHtml(donnees, urlSite),
+      text: billetTexte(donnees),
+    });
+    if (!r.ok) console.error('[envoyerBillet] client', r.status, await r.text());
   } catch (e) {
-    console.error('[envoyerBillet]', e);
+    console.error('[envoyerBillet] client', e);
+  }
+
+  // --- alerte au comité ---
+  if (process.env.CONTACT_EMAIL) {
+    try {
+      const r = await envoyer({
+        from,
+        to: [process.env.CONTACT_EMAIL],
+        reply_to: resa.email,
+        subject: `Réservation : ${resa.nom} — ${donnees.evenement.titre}`,
+        html: alerteReservationHtml(donnees),
+      });
+      if (!r.ok) console.error('[envoyerBillet] comité', r.status, await r.text());
+    } catch (e) {
+      console.error('[envoyerBillet] comité', e);
+    }
   }
 }
 

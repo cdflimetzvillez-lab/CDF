@@ -2,14 +2,29 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://cdf-limetzvillez.fr'),
   title: 'Comité des Fêtes de Limetz-Villez',
   description:
     "Brocante, fête de la musique, fête des battages, marché de Noël : les rendez-vous du village de Limetz-Villez, toute l'année.",
   openGraph: {
     title: 'Comité des Fêtes de Limetz-Villez',
-    description: 'Quatre rendez-vous par an, montés par les habitants du village.',
+    description: 'Brocante, fête de la bière, marché de Noël : les rendez-vous du village, toute l\'année.',
+    url: '/',
+    siteName: 'Comité des Fêtes de Limetz-Villez',
     type: 'website',
     locale: 'fr_FR',
+    images: [{
+      url: '/og-image.png',
+      width: 1200,
+      height: 630,
+      alt: 'Comité des Fêtes de Limetz-Villez',
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Comité des Fêtes de Limetz-Villez',
+    description: 'Les rendez-vous du village, toute l\'année.',
+    images: ['/og-image.png'],
   },
 };
 

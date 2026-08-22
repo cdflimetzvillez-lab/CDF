@@ -72,6 +72,11 @@ export default function EditeurEvenement({ evenement, creneaux, infos, faq }: Pr
               defaultValue={e.date_debut ?? ''} />
           </div>
           <div className="field">
+            <label htmlFor="date_fin">Date de fin (si plusieurs jours)</label>
+            <input id="date_fin" name="date_fin" type="date"
+              defaultValue={e.date_fin ?? ''} />
+          </div>
+          <div className="field">
             <label htmlFor="heure_debut">Heure de début</label>
             <input id="heure_debut" name="heure_debut" defaultValue={e.heure_debut ?? ''} placeholder="18h" />
           </div>

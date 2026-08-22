@@ -8,7 +8,7 @@ import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import FormulaireDemande from '@/components/FormulaireDemande';
 import FormulaireReservation from '@/components/FormulaireReservation';
-import { jourMois, horaires, dateLongue, texteSur } from '@/lib/format';
+import { jourMois, horaires, dateLongue, periode, texteSur } from '@/lib/format';
 import type { Evenement, Creneau, InfoBloc, FaqItem, SiteSettings } from '@/lib/types';
 
 export const revalidate = 60;
@@ -30,7 +30,14 @@ export async function generateMetadata(
   return {
     title: `${data.titre} — Comité des Fêtes de Limetz-Villez`,
     description: data.chapo ?? undefined,
-    openGraph: { images: data.image_url ? [data.image_url] : undefined },
+    openGraph: {
+      title: data.titre,
+      description: data.chapo ?? undefined,
+      images: [{
+        url: data.image_url ?? '/og-image.png',
+        width: 1200, height: 630, alt: data.titre,
+      }],
+    },
   };
 }
 
@@ -73,7 +80,7 @@ export default async function PageEvenement(
         style={e.image_url ? { backgroundImage: `url(${e.image_url})` } : undefined}
       >
         <div className="ehero-inner">
-          <span className="badge-num">{dateLongue(e.date_debut)}</span>
+          <span className="badge-num">{periode(e.date_debut, e.date_fin)}</span>
           <h1>{e.titre}</h1>
           {e.chapo && <p className="ehero-lead">{e.chapo}</p>}
 

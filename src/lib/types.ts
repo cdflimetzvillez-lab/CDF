@@ -31,6 +31,7 @@ export interface Evenement {
   couleur: string;
   couleur_sombre: string;
   date_debut: string;
+  date_fin: string | null;
   heure_debut: string | null;
   heure_fin: string | null;
   lieu: string | null;
