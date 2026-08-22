@@ -2,6 +2,7 @@
 import { useActionState, useState } from 'react';
 import Link from 'next/link';
 import { enregistrerEvenement, type ActionState } from '@/app/actions';
+import ChampImage from '@/components/ChampImage';
 import type { Evenement, Creneau, InfoBloc, FaqItem } from '@/lib/types';
 
 type Props = {
@@ -120,10 +121,12 @@ export default function EditeurEvenement({ evenement, creneaux, infos, faq }: Pr
           </div>
         </div>
         <div className="row2">
-          <div className="field">
-            <label htmlFor="image_url">Image de partage (URL)</label>
-            <input id="image_url" name="image_url" defaultValue={e.image_url ?? ''} />
-          </div>
+          <ChampImage
+            name="image_url"
+            label="Image de fond du bandeau"
+            valeurInitiale={e.image_url ?? null}
+            aide="Remplace les rayons colorés. Format paysage, 1600px de large minimum."
+          />
           <div className="field">
             <label htmlFor="position">Ordre d&apos;affichage</label>
             <input id="position" name="position" type="number" defaultValue={e.position ?? 0} />

@@ -68,7 +68,10 @@ export default async function PageEvenement(
       <MenuButton />
       <Link className="crumb" href="/#evenements">← Tous les événements</Link>
 
-      <header className="ehero">
+      <header
+        className={`ehero${e.image_url ? ' avec-image' : ''}`}
+        style={e.image_url ? { backgroundImage: `url(${e.image_url})` } : undefined}
+      >
         <div className="ehero-inner">
           <span className="badge-num">{dateLongue(e.date_debut)}</span>
           <h1>{e.titre}</h1>

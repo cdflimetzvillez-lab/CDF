@@ -21,6 +21,8 @@ export async function reserver(_prev: EtatResa, fd: FormData): Promise<EtatResa>
 
   if (!nom || nom.length < 2) return { erreur: 'Merci d\u2019indiquer votre nom.' };
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { erreur: 'Adresse email invalide.' };
+  if (telephone.replace(/[\s.\-()]/g, '').length < 10)
+    return { erreur: 'Merci d\u2019indiquer un numéro de téléphone valide.' };
   if (!Number.isInteger(places) || places < 1) return { erreur: 'Nombre de places invalide.' };
 
   const db = createAdminClient();
@@ -82,7 +84,7 @@ export async function reserver(_prev: EtatResa, fd: FormData): Promise<EtatResa>
     const checkout = await creerCheckout({
       reference,
       montantCentimes: montant,
-      description: `${evt.titre} — ${places} place${places > 1 ? 's' : ''}`,
+      description: `${reference} · ${nom} · ${evt.titre} · ${places} place${places > 1 ? 's' : ''}`,
       emailClient: email,
       urlRetour: `${base}/evenements/${evt.slug}/reservation?ref=${reference}`,
     });

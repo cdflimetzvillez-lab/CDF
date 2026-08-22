@@ -68,8 +68,12 @@ export default function FormulaireReservation({
       </div>
 
       <div className="field">
-        <label htmlFor="r-tel">Téléphone (facultatif)</label>
-        <input id="r-tel" name="telephone" type="tel" placeholder="06 12 34 56 78" />
+        <label htmlFor="r-tel">Téléphone</label>
+        <input id="r-tel" name="telephone" type="tel" required
+          placeholder="06 12 34 56 78" />
+        <small style={{ fontSize: '.72rem', color: '#6b6560' }}>
+          Pour vous joindre en cas de changement de dernière minute.
+        </small>
       </div>
 
       <div className="field">

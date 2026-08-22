@@ -37,9 +37,9 @@ export default async function Reservations({
       <div className="adm-h">
         <div>
           <h1>Réservations</h1>
-          <p>Suivi des paiements SumUp et liste d&apos;émargement.</p>
+          <p>Suivi des paiements SumUp, pointage et liste d&apos;émargement.</p>
         </div>
-        <ExportCsv reservations={liste} />
+        <ExportCsv reservations={liste} evenements={evenements ?? []} />
       </div>
 
       <div className="kpi">
@@ -76,9 +76,12 @@ export default async function Reservations({
                       : 'illimitée'}
                   </td>
                   <td>{euros(s.recette_centimes)}</td>
-                  <td style={{ textAlign: 'right' }}>
+                  <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                    <Link className="btn btn-y btn-sm" href={`/admin/pointage/${s.id}`}>
+                      Pointer
+                    </Link>{' '}
                     <Link className="btn btn-w btn-sm" href={`/admin/reservations?evt=${s.id}`}>
-                      Filtrer
+                      Détail
                     </Link>
                   </td>
                 </tr>
