@@ -7,6 +7,7 @@ import MenuButton from '@/components/MenuButton';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import FormulaireDemande from '@/components/FormulaireDemande';
+import FormulaireReservation from '@/components/FormulaireReservation';
 import { jourMois, horaires, dateLongue, texteSur } from '@/lib/format';
 import type { Evenement, Creneau, InfoBloc, FaqItem, SiteSettings } from '@/lib/types';
 
@@ -54,6 +55,11 @@ export default async function PageEvenement(
   ]);
 
   const s = settings as SiteSettings;
+
+  const { data: placesRestantes } = e.billetterie_active && e.places_max
+    ? await supabase.rpc('places_restantes', { evt_id: e.id })
+    : { data: null };
+
   const jm = jourMois(e.date_debut);
   const cr = (creneaux ?? []) as Creneau[];
 
@@ -71,7 +77,7 @@ export default async function PageEvenement(
           <div className="keys">
             <div className="key">
               <div className="k">Date</div>
-              <div className="v">{jm.jour} {jm.date}</div>
+              <div className="v">{jm.jour}<br />{jm.date}</div>
             </div>
             <div className="key">
               <div className="k">Horaires</div>
@@ -89,7 +95,9 @@ export default async function PageEvenement(
 
           <div className="ehero-cta">
             {cr.length > 0 && <a className="btn btn-y" href="#programme">Voir le programme</a>}
-            <a className="btn btn-w" href="#participer">Participer</a>
+            <a className="btn btn-w" href={e.billetterie_active ? '#reserver' : '#participer'}>
+              {e.billetterie_active ? e.libelle_reservation : 'Participer'}
+            </a>
             {infos && infos.length > 0 && <a className="btn btn-k" href="#infos">Y aller</a>}
           </div>
         </div>
@@ -139,18 +147,39 @@ export default async function PageEvenement(
         </section>
       )}
 
-      <section className="take" id="participer">
-        <div className="wrap take-grid">
-          <div>
-            <h2>Vous voulez en être ?</h2>
-            <p style={{ marginTop: '1rem', fontWeight: 600, maxWidth: '44ch', lineHeight: 1.6 }}>
-              Exposant, musicien, ou simple coup de main pour le montage : dites-nous
-              ce que vous proposez, le comité vous répond.
-            </p>
+      {e.billetterie_active ? (
+        <section className="take" id="reserver">
+          <div className="wrap take-grid">
+            <div>
+              <h2>Réservez votre place</h2>
+              <p style={{ marginTop: '1rem', fontWeight: 600, maxWidth: '44ch', lineHeight: 1.6 }}>
+                Paiement en ligne sécurisé. Votre billet vous est envoyé par email
+                dès le règlement effectué.
+              </p>
+            </div>
+            <FormulaireReservation
+              evenementId={e.id}
+              prixCentimes={e.prix_centimes}
+              placesMax={e.places_par_reservation}
+              placesRestantes={placesRestantes as number | null}
+              cloture={e.cloture_reservations}
+            />
           </div>
-          <FormulaireDemande evenementId={e.id} />
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section className="take" id="participer">
+          <div className="wrap take-grid">
+            <div>
+              <h2>Participer à l&apos;organisation</h2>
+              <p style={{ marginTop: '1rem', fontWeight: 600, maxWidth: '44ch', lineHeight: 1.6 }}>
+                Exposant, musicien, ou simple coup de main pour le montage : dites-nous
+                ce que vous proposez, le comité vous répond.
+              </p>
+            </div>
+            <FormulaireDemande evenementId={e.id} />
+          </div>
+        </section>
+      )}
 
       {faq && faq.length > 0 && (
         <section>

@@ -344,3 +344,12 @@ footer a:hover{color:var(--jaune);}
   .scroll-hint svg{animation:none;}
   .to-top{transition:opacity .01s;}
 }
+
+/* ---------- BOUTON RÉSERVER ---------- */
+.btn-reserver{background:var(--noir);color:var(--jaune);font-size:.95rem;
+  font-weight:700;padding:1.25rem 2.4rem;border-width:4px;
+  box-shadow:7px 7px 0 var(--creme);}
+.btn-reserver:hover{transform:translate(4px,4px);box-shadow:3px 3px 0 var(--creme);}
+@media(max-width:820px){
+  .btn-reserver{width:100%;text-align:center;padding:1.1rem 1.5rem;}
+}

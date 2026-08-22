@@ -1,0 +1,40 @@
+/* ===== BILLETTERIE — à coller à la fin de globals.css ===== */
+
+/* Total dans le formulaire */
+.resa-total{display:flex;justify-content:space-between;align-items:baseline;
+  border-top:3px solid var(--noir);margin:1.2rem 0 .8rem;padding-top:.9rem;}
+.resa-total span{font-family:'DM Mono',monospace;font-size:.7rem;
+  letter-spacing:.14em;text-transform:uppercase;}
+.resa-total b{font-family:'Anton',sans-serif;font-size:1.8rem;line-height:1;}
+.resa-alerte{background:var(--jaune);border:2px solid var(--noir);
+  padding:.5rem .8rem;font-size:.8rem;font-weight:700;margin-bottom:.9rem;}
+
+/* Écran de retour de paiement */
+.ecran-resa{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:2rem 1.2rem;}
+.ecran-boite{background:var(--creme);border:4px solid var(--noir);
+  box-shadow:12px 12px 0 var(--noir);max-width:520px;width:100%;padding:2.2rem 1.9rem;
+  text-align:center;}
+.ecran-boite h1{font-size:clamp(1.9rem,6vw,2.8rem);line-height:1;margin-bottom:1.2rem;}
+.ecran-boite p{font-weight:600;line-height:1.6;font-size:.95rem;}
+.ecran-boite .btn{margin-top:1.6rem;}
+
+/* Billet */
+.billet{border:3px dashed var(--noir);padding:1.4rem 1.2rem;text-align:left;
+  background:#fff;}
+.billet-code{text-align:center;border-bottom:3px dashed var(--noir);
+  padding-bottom:1rem;margin-bottom:1rem;}
+.billet-code span{display:block;color:#6b6560;margin-bottom:.3rem;}
+.billet-code b{font-family:'Anton',sans-serif;font-size:2.4rem;letter-spacing:.08em;
+  line-height:1;}
+.billet-infos{display:grid;gap:.55rem;}
+.billet-infos > div{display:flex;justify-content:space-between;gap:1rem;
+  font-size:.88rem;border-bottom:1px solid #e8e2d8;padding-bottom:.45rem;}
+.billet-infos dt{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;
+  text-transform:uppercase;color:#6b6560;}
+.billet-infos dd{font-weight:700;text-align:right;}
+
+/* Jauge de remplissage dans l'admin */
+.jauge{height:7px;background:#e2ddd6;border:1px solid var(--noir);margin-top:.35rem;
+  width:120px;}
+.jauge span{display:block;height:100%;background:var(--rose);}

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 const LIENS = [
   { href: '/admin', label: 'Tableau de bord' },
   { href: '/admin/evenements', label: 'Événements' },
+  { href: '/admin/reservations', label: 'Réservations' },
   { href: '/admin/demandes', label: 'Demandes reçues' },
   { href: '/admin/association', label: 'Association' },
   { href: '/admin/parametres', label: 'Réglages du site' },

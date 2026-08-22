@@ -93,23 +93,6 @@ export default function EditeurEvenement({ evenement, creneaux, infos, faq }: Pr
             <input id="tarif" name="tarif" defaultValue={e.tarif ?? 'Entrée libre'} />
           </div>
         </div>
-
-        <div className="row2">
-          <div className="field">
-            <label htmlFor="lien_reservation">
-              Lien de réservation (laisser vide = pas de bouton)
-            </label>
-            <input id="lien_reservation" name="lien_reservation"
-              defaultValue={e.lien_reservation ?? ''}
-              placeholder="https://helloasso.com/... ou mailto:..." />
-          </div>
-          <div className="field">
-            <label htmlFor="libelle_reservation">Texte du bouton</label>
-            <input id="libelle_reservation" name="libelle_reservation"
-              defaultValue={e.libelle_reservation ?? 'Réserver'}
-              placeholder="Réserver" />
-          </div>
-        </div>
       </div>
 
       {/* ---------- Apparence ---------- */}
@@ -151,6 +134,57 @@ export default function EditeurEvenement({ evenement, creneaux, infos, faq }: Pr
             style={{ width: 20, height: 20 }} />
           Publier cet événement sur le site
         </label>
+      </div>
+
+      {/* ---------- Billetterie ---------- */}
+      <div className="panel">
+        <h2>Billetterie en ligne</h2>
+        <label style={{ display: 'flex', gap: '.6rem', alignItems: 'center', fontWeight: 600 }}>
+          <input type="checkbox" name="billetterie_active"
+            defaultChecked={e.billetterie_active ?? false}
+            style={{ width: 20, height: 20 }} />
+          Activer la réservation avec paiement SumUp
+        </label>
+        <p style={{ color: '#6b6560', fontSize: '.85rem', margin: '.6rem 0 1.2rem' }}>
+          Si désactivée, le lien externe ci-dessous est utilisé à la place.
+        </p>
+
+        <div className="row3">
+          <div className="field">
+            <label htmlFor="prix_euros">Prix par place (€)</label>
+            <input id="prix_euros" name="prix_euros" type="number" step="0.01" min="0"
+              defaultValue={((e.prix_centimes ?? 0) / 100).toFixed(2)} />
+          </div>
+          <div className="field">
+            <label htmlFor="places_max">Jauge totale (vide = illimitée)</label>
+            <input id="places_max" name="places_max" type="number" min="1"
+              defaultValue={e.places_max ?? ''} />
+          </div>
+          <div className="field">
+            <label htmlFor="places_par_reservation">Places max par réservation</label>
+            <input id="places_par_reservation" name="places_par_reservation"
+              type="number" min="1" defaultValue={e.places_par_reservation ?? 10} />
+          </div>
+        </div>
+
+        <div className="row3">
+          <div className="field">
+            <label htmlFor="cloture_reservations">Clôture des réservations</label>
+            <input id="cloture_reservations" name="cloture_reservations" type="date"
+              defaultValue={e.cloture_reservations ?? ''} />
+          </div>
+          <div className="field">
+            <label htmlFor="lien_reservation">Lien externe (si billetterie désactivée)</label>
+            <input id="lien_reservation" name="lien_reservation"
+              defaultValue={e.lien_reservation ?? ''}
+              placeholder="https://... ou mailto:..." />
+          </div>
+          <div className="field">
+            <label htmlFor="libelle_reservation">Texte du bouton</label>
+            <input id="libelle_reservation" name="libelle_reservation"
+              defaultValue={e.libelle_reservation ?? 'Réserver'} />
+          </div>
+        </div>
       </div>
 
       {/* ---------- Programme ---------- */}

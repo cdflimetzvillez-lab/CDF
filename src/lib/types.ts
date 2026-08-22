@@ -37,6 +37,11 @@ export interface Evenement {
   tarif: string;
   lien_reservation: string | null;
   libelle_reservation: string;
+  billetterie_active: boolean;
+  prix_centimes: number;
+  places_max: number | null;
+  places_par_reservation: number;
+  cloture_reservations: string | null;
   saison: Saison;
   image_url: string | null;
   publie: boolean;
@@ -60,4 +65,23 @@ export interface Demande {
   id: string; evenement_id: string | null; nom: string; email: string;
   telephone: string | null; type: string; message: string | null;
   statut: 'nouveau' | 'traite' | 'refuse'; created_at: string;
+}
+
+export interface Reservation {
+  id: string;
+  evenement_id: string;
+  nom: string;
+  email: string;
+  telephone: string | null;
+  commentaire: string | null;
+  places: number;
+  montant_centimes: number;
+  reference: string;
+  checkout_id: string | null;
+  transaction_code: string | null;
+  statut: 'en_attente' | 'payee' | 'echouee' | 'expiree' | 'remboursee' | 'annulee';
+  paye_le: string | null;
+  code_billet: string;
+  scanne_le: string | null;
+  created_at: string;
 }

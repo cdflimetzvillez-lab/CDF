@@ -117,6 +117,11 @@ export async function enregistrerEvenement(_prev: ActionState, fd: FormData): Pr
     tarif: String(fd.get('tarif') ?? 'Entrée libre'),
     lien_reservation: String(fd.get('lien_reservation') ?? '').trim() || null,
     libelle_reservation: String(fd.get('libelle_reservation') ?? '').trim() || 'Réserver',
+    billetterie_active: fd.get('billetterie_active') === 'on',
+    prix_centimes: Math.round(Number(fd.get('prix_euros') ?? 0) * 100),
+    places_max: fd.get('places_max') ? Number(fd.get('places_max')) : null,
+    places_par_reservation: Number(fd.get('places_par_reservation') ?? 10),
+    cloture_reservations: String(fd.get('cloture_reservations') ?? '') || null,
     saison: String(fd.get('saison') ?? 'ete'),
     image_url: String(fd.get('image_url') ?? '').trim() || null,
     publie: fd.get('publie') === 'on',
@@ -179,19 +184,11 @@ export async function enregistrerEvenement(_prev: ActionState, fd: FormData): Pr
   return { ok: 'Événement enregistré.' };
 }
 
-export async function supprimerEvenement(id: string): Promise<ActionState> {
+export async function supprimerEvenement(id: string) {
   const { supabase, isAdmin } = await requireAdmin();
-  if (!isAdmin) return { error: 'Accès refusé.' };
-
-  const { error } = await supabase.from('evenements').delete().eq('id', id);
-  if (error) {
-    console.error('[supprimerEvenement]', error);
-    return { error: error.message };
-  }
-
-  revalidatePath('/');
-  revalidatePath('/admin/evenements');
-  return { ok: 'Événement supprimé.' };
+  if (!isAdmin) return;
+  await supabase.from('evenements').delete().eq('id', id);
+  revalidatePath('/'); revalidatePath('/admin/evenements');
 }
 
 export async function basculerPublication(id: string, publie: boolean) {
@@ -209,16 +206,9 @@ export async function changerStatutDemande(id: string, statut: string) {
   revalidatePath('/admin/demandes');
 }
 
-export async function supprimerDemande(id: string): Promise<ActionState> {
+export async function supprimerDemande(id: string) {
   const { supabase, isAdmin } = await requireAdmin();
-  if (!isAdmin) return { error: 'Accès refusé.' };
-
-  const { error } = await supabase.from('demandes').delete().eq('id', id);
-  if (error) {
-    console.error('[supprimerDemande]', error);
-    return { error: error.message };
-  }
-
+  if (!isAdmin) return;
+  await supabase.from('demandes').delete().eq('id', id);
   revalidatePath('/admin/demandes');
-  return { ok: 'Demande supprimée.' };
 }
